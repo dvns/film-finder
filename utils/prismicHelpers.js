@@ -18,3 +18,18 @@ const createClientOptions = (req = null, prismicAccessToken = null) => {
     ...accessTokenOption,
   };
 };
+
+export const getAllFilms = async () => {
+  const client = Client();
+  const res = await client.query(
+    Prismic.Predicates.at('document.type', 'film_stock')
+  );
+  const films = res.results;
+  return films;
+}
+
+export const getFilmByUID = async (uid) => {
+  const client = Client();
+  const res = await client.getByUID('film_stock', uid);
+  return res;
+}

@@ -1,8 +1,7 @@
 import Head from 'next/head';
-import Prismic from 'prismic-javascript';
 import styles from '../styles/Home.module.css';
 
-import { Client } from '../utils/prismicHelpers';
+import { getAllFilms } from '../utils/prismicHelpers';
 
 export default function Home({ films }) {
   return (
@@ -27,14 +26,11 @@ export default function Home({ films }) {
 }
 
 export async function getStaticProps() {
-  const client = Client();
-  const res = await client.query(
-    Prismic.Predicates.at('document.type', 'film_stock'),
-  );
-  const films = await res.results.sort((a, b) => {
+  const films = await getAllFilms();
+  
+  films.sort((a, b) => {
     const nameA = (a.data.brand + ' ' + a.data.name).toLowerCase();
     const nameB = (b.data.brand + ' ' + b.data.name).toLowerCase();
-
     if (nameA < nameB) {
       return -1;
     } else if (nameB > nameA) {
