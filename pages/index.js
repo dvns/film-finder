@@ -1,7 +1,8 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 
-import { getAllFilms } from '../utils/prismicHelpers';
+import { fetchContent } from '../utils/contentfulHelpers';
 
 export default function Home({ films }) {
   return (
@@ -13,24 +14,43 @@ export default function Home({ films }) {
 
       <main>
         <ul>
-          {films.map(film => 
-            <li key={film.id}>
-              <p>{film.data.brand} {film.data.name}</p>
-              <p>{film.data.colour} Film</p>
+          {films.map((film) => (
+            <li key={film.slug}>
+              <Link href={`/films/${film.slug}`}>
+              <p>{film.brand.name} {film.name}</p>
+              </Link>
             </li>
-          )}
+          ))}
         </ul>
       </main>
     </div>
-  )
+  );
 }
 
 export async function getStaticProps() {
-  const films = await getAllFilms();
+  const response = await fetchContent(`
+    {
+      filmCollection {
+        items {
+          slug
+          name
+          brand {
+            name
+          }
+          iso
+          type
+          format
+          flickrQuery
+        }
+      }
+    }
+  `);
+
+  const films = response.filmCollection.items;
   
   films.sort((a, b) => {
-    const nameA = (a.data.brand + ' ' + a.data.name).toLowerCase();
-    const nameB = (b.data.brand + ' ' + b.data.name).toLowerCase();
+    const nameA = (a.brand.name + ' ' + a.name).toLowerCase();
+    const nameB = (b.brand.name + ' ' + b.name).toLowerCase();
     if (nameA < nameB) {
       return -1;
     } else if (nameB > nameA) {
