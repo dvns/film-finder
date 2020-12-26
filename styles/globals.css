@@ -14,3 +14,20 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.image-gallery {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-auto-rows: 0;
+}
+
+.image-gallery-item {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.image-gallery-item img {
+  display: block;
+  width: 100%;
+}

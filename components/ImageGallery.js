@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
+import ImageGalleryItem from './ImageGalleryItem';
 
 const API_KEY = process.env.NEXT_PUBLIC_FLICKR_API_KEY;
 const sort = 'interestingness-desc';
-const perPage = 50;
+const perPage = 15;
 const getDate = (months) => {
   let d = new Date();
   d.setMonth(d.getMonth() - months);
   return d.getTime() / 1000;
 };
 const minDate = getDate(12);
-const maxDate = getDate(1)
-const extras = 'url_z'
+const maxDate = getDate(1);
+const extras = 'url_z';
 
 
 export default function ImageGallery({ queryString }) {
@@ -28,12 +29,9 @@ export default function ImageGallery({ queryString }) {
   }, [])
 
   return (
-    <div>
-      {images.map((img) => (
-        <img
-          key={img.id}
-          src={img.url_z}
-        />
+    <div className="image-gallery">
+      {images.map((image) => (
+        <ImageGalleryItem key={image.id} image={image} />
       ))}
     </div>
   );
