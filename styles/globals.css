@@ -16,6 +16,7 @@ a {
 }
 
 .image-gallery {
+  max-width: 1300px;
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -30,4 +31,10 @@ a {
 .image-gallery-item img {
   display: block;
   width: 100%;
+}
+
+.image-gallery-item-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #f1f1f1;
 }

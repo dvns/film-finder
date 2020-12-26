@@ -1,30 +1,60 @@
 import { useState, useEffect, useRef } from 'react';
 
-export default function ImageGalleryItem({image}) {
-    const imageRef = useRef(null);
+const options = {
+  threshold: 1.0,
+  rootMargin: '0px 0px 500px 0px',
+};
+
+export default function ImageGalleryItem({img}) {
+    const itemRef = useRef(null);
     const [span, setSpan] = useState(0);
+    const [showImage, setShowImage] = useState(false);
 
     useEffect(() => {
-      imageRef.current.addEventListener('load', updateSpan);
+      const callback = (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          setShowImage(true);
+        });
+      };
+      const observer = new IntersectionObserver(callback, options);
+      
+      observer.observe(itemRef.current);
+      updateSpan();
       window.addEventListener('resize', updateSpan);
       return () => {
         window.removeEventListener('resize', updateSpan);
+        observer.disconnect();
       };
     }, [])
 
     function updateSpan() {
-      const height = imageRef.current.clientHeight;
-      const span = Math.ceil((height)/ 20);
+      const aspectRatio = img.width_z / img.height_z;
+      const width = itemRef.current.clientWidth;
+      const height = width / aspectRatio;
+      const span = Math.ceil(height/ 20);
       setSpan(span);
     }
 
     return (
-      <div className="image-gallery-item" style={{gridRowEnd: `span ${span}` }}>
-        <img
-          onClick={() => window.open(`https://www.flickr.com/photos/${image.owner}/${image.id}`, '_blank')}
-          src={image.url_z}
-          ref={imageRef}
-        />
+      <div
+        ref={itemRef}
+        className="image-gallery-item"
+        style={{ gridRowEnd: `span ${span}` }}
+      >
+        {showImage ? (
+          <img
+            onClick={() =>
+              window.open(
+                `https://www.flickr.com/photos/${img.owner}/${img.id}`,
+                "_blank"
+              )
+            }
+            src={img.url_z}
+          />
+        ) : (
+          <div className="image-gallery-item-placeholder"></div>
+        )}
       </div>
-    )
+    );
   }
