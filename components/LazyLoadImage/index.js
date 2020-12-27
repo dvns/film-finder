@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { LazyContainer, Image, Placeholder } from './styles';
 
 const options = {
-  threshold: 1.0,
+  threshold: 0.5,
   rootMargin: '0px 0px 300px 0px',
 };
 

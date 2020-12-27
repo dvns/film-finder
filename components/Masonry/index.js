@@ -23,7 +23,7 @@ export default function Masonry({children, gap, minWidth = 500}) {
   }, [])
 
   return (
-    <MasonryDiv ref={masonryRef} gap={gap}>
+    <MasonryDiv ref={masonryRef} gap={gap} col={colsCount}>
       {[...Array(colsCount).keys()].map(i => (
         <Col key={i} gap={gap}>
           {cols[i]}
