@@ -10,6 +10,7 @@ export default function LazyLoadImage({src, width, height}) {
   const itemRef = useRef(null);
   const [showImage, setShowImage] = useState(false);
   const [itemHeight, setItemHeight] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const callback = (entries) => {
@@ -37,7 +38,17 @@ export default function LazyLoadImage({src, width, height}) {
 
   return (
     <LazyContainer ref={itemRef}>
-      {showImage ? <Image src={src} /> : <Placeholder dataHeight={`${itemHeight}px`} />}
+      {showImage && 
+        <Image 
+          src={src} 
+          onLoad={() => setLoaded(true)}
+          show={loaded}
+        />
+      }
+      <Placeholder
+        dataHeight={`${itemHeight}px`}
+        hidden={loaded}
+      />
     </LazyContainer>
   );
 }
