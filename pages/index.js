@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 
 import { fetchContent } from '../utils/contentfulHelpers';
+import SearchSuggested from '../components/SearchSuggested';
 
 export default function Home({ films }) {
   return (
@@ -13,15 +13,7 @@ export default function Home({ films }) {
       </Head>
 
       <main>
-        <ul>
-          {films.map((film) => (
-            <li key={film.slug}>
-              <Link href={`/films/${film.slug}`}>
-              <p>{film.brand.name} {film.name}</p>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <SearchSuggested items={films}/>
       </main>
     </div>
   );
