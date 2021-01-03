@@ -14,27 +14,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
-.image-gallery {
-  max-width: 1300px;
-  display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  grid-auto-rows: 0;
-}
-
-.image-gallery-item {
-  display: inline-block;
-  overflow: hidden;
-}
-
-.image-gallery-item img {
-  display: block;
-  width: 100%;
-}
-
-.image-gallery-item-placeholder {
-  width: 100%;
-  height: 100%;
-  background: #f1f1f1;
-}
