@@ -1,15 +1,12 @@
-import styled from 'styled-components';
+import {ProductDiv, Title, ImageContainer, ProductInfo} from './styles';
 
-const Card = styled.div`
-  img {
-    width: 100px;
-  }
-`;
-
-export default function Product({children}) {
+export default function Product({title, img}) {
   return (
-    <Card>
-      {children}
-    </Card>
-  )
+    <ProductDiv>
+      <ImageContainer>{img && <img src={img.url}></img>}</ImageContainer>
+      <ProductInfo>
+        <Title dangerouslySetInnerHTML={{ __html: title }}></Title>
+      </ProductInfo>
+    </ProductDiv>
+  );
 };

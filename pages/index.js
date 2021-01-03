@@ -1,12 +1,11 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
 
 import { fetchFilms } from '../utils/contentfulHelpers';
 import SearchSuggested from '../components/SearchSuggested';
 
 export default function Home({ films }) {
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />

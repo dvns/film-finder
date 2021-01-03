@@ -9,13 +9,28 @@ import {
   stringToArrayLowerCase,
 } from '../../utils/searchHelpers';
 
-const Result = forwardRef(({ onClick, href, film }, ref) => {
+import { Results, Suggested } from './styles';
+
+function boldText(text, searchTerm) {
+  const searchArr = searchTerm.trim().split(/\s+/);
+  const textArr = text.trim().split(/\s+/);
+  textArr.forEach((t, idx) => {
+    searchArr.forEach(w => {
+      const regex = new RegExp(w, 'gi');
+      const bold = textArr[idx].replace(regex, (str) => `<b>${str}</b>`)
+      textArr[idx] = bold;
+    })
+  });
+  return textArr.join(' ');
+}
+
+const Result = forwardRef(({ onClick, href, film, searchTerm }, ref) => {
   return (
     <a href={href} onClick={onClick} ref={ref}>
-      <Product>
-        {film.image && <img src={film.image.url} />}
-        <p>{`${film.brand.name} ${film.name}`}</p>
-      </Product>
+      <Product
+        img={film.image}
+        title={boldText(`${film.brand.name} ${film.name}`, searchTerm)}
+      ></Product>
     </a>
   );
 });
@@ -24,6 +39,7 @@ export default function SearchSuggested({items}) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
+  const [focused, setFocused] = useState(false);
 
   function changeHandler(e) {
     const value = e.target.value
@@ -56,15 +72,22 @@ export default function SearchSuggested({items}) {
   }
 
   return (
-    <>
+    <Suggested focused={focused}>
       <form onSubmit={submitHandler}>
-        <SearchInput value={searchTerm} handleChange={changeHandler} />
+        <SearchInput
+          value={searchTerm}
+          handleChange={changeHandler}
+          handleFocus={(boolean) => setFocused(boolean)}
+        />
       </form>
-      {results.map((film) => (
-        <Link key={film.slug} href={`/films/${film.slug}`} passHref>
-          <Result film={film}></Result>
-        </Link>
-      ))}
-    </>
+
+      <Results>
+        {results.map((film) => (
+          <Link key={film.slug} href={`/films/${film.slug}`} passHref>
+            <Result film={film} searchTerm={searchTerm}></Result>
+          </Link>
+        ))}
+      </Results>
+    </Suggested>
   );
 }
