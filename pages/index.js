@@ -9,10 +9,12 @@ export default function Home({ films }) {
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
       </Head>
 
       <main>
         <SearchSuggested items={films}/>
+        <h1>Film Finder</h1>
       </main>
     </div>
   );

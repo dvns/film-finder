@@ -35,6 +35,8 @@ const Result = forwardRef(({ onClick, href, film, searchTerm }, ref) => {
   );
 });
 
+const minSearchLength = 2;
+
 export default function SearchSuggested({ items }) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
@@ -69,7 +71,7 @@ export default function SearchSuggested({ items }) {
   }
 
   function filterItems() {
-    if (searchTerm.trim().length < 2) {
+    if (searchTerm.trim().length < minSearchLength) {
       setResults([]);
       return;
     }
@@ -110,12 +112,12 @@ export default function SearchSuggested({ items }) {
       </form>
 
       <Results show={focused}>
-        {searchTerm.length < 2 && (
+        {searchTerm.length < minSearchLength && (
           <InstructionText>
             Find a film by typing in the search bar.
           </InstructionText>
         )}
-        {searchTerm.length >= 2 && results.length < 1 && (
+        {searchTerm.length >= minSearchLength && results.length < 1 && (
           <InstructionText>No results for "{searchTerm}".</InstructionText>
         )}
         {results.length > 0 &&

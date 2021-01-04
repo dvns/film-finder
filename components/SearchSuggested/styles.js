@@ -2,8 +2,15 @@ import styled from 'styled-components';
 
 export const Suggested = styled.div`
   position: ${props => props.focused ? 'fixed' : 'static'};
+  top: 0;
   width: 100%;
   height: ${props => props.focused ? '100vh' : 'auto'};
+  background: white;
+
+  form {
+    padding: 10px;
+    border-bottom: 1px solid #e5e5e5;
+  }
 `;
 
 export const Results = styled.div`
