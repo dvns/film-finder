@@ -1,13 +1,14 @@
 import { Input } from './styles';
 
-export default function SearchInput({value, handleChange, handleFocus}) {
+export default function SearchInput({value, handleChange, handleFocus, placeholder}) {
 
   return (
     <Input
       type="text"
       onChange={handleChange}
-      value={value}
       onFocus={() => handleFocus(true)}
+      value={value}
+      placeholder={placeholder}
     />
   )
 }
