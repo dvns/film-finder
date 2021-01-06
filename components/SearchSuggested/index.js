@@ -9,7 +9,14 @@ import {
   stringToArrayLowerCase,
 } from "../../utils/searchHelpers";
 
-import { CancelButton, SearchWrapper, IconWrapper, InstructionText, Results, Suggested } from "./styles";
+import {
+  CancelButton,
+  SearchWrapper,
+  IconWrapper,
+  InstructionText,
+  Results,
+  Suggested,
+} from "./styles";
 
 import SearchIcon from "../Icons/IconSearch";
 import IconX from "../Icons/IconX";
@@ -66,7 +73,7 @@ export default function SearchSuggested({ items }) {
 
   useEffect(() => {
     filterItems();
-  }, [searchTerm])
+  }, [searchTerm]);
 
   function changeHandler(e) {
     const value = e.target.value;
