@@ -3,6 +3,7 @@ import { Input } from "./styles";
 
 export default function SearchInput({
   value,
+  active,
   handleChange,
   handleFocus,
   placeholder,
@@ -30,6 +31,7 @@ export default function SearchInput({
       onFocus={() => handleFocus(true)}
       value={value}
       placeholder={placeholder}
+      active={active}
     />
   );
 }

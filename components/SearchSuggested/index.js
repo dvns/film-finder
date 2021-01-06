@@ -9,7 +9,10 @@ import {
   stringToArrayLowerCase,
 } from "../../utils/searchHelpers";
 
-import { CancelButton, InstructionText, Results, Suggested } from "./styles";
+import { CancelButton, SearchWrapper, IconWrapper, InstructionText, Results, Suggested } from "./styles";
+
+import SearchIcon from "../Icons/IconSearch";
+import IconX from "../Icons/IconX";
 
 function boldText(text, searchTerm) {
   const searchArr = searchTerm.trim().split(/\s+/);
@@ -96,28 +99,31 @@ export default function SearchSuggested({ items }) {
   }
 
   return (
-    <Suggested focused={focused}>
+    <Suggested>
       <form onSubmit={submitHandler}>
-        <SearchInput
-          value={searchTerm}
-          handleChange={changeHandler}
-          handleFocus={(boolean) => setFocused(boolean)}
-          placeholder="Search for a film"
-        />
-        {focused && (
-          <CancelButton type="button" onClick={() => setFocused(false)}>
-            Cancel
+        <SearchWrapper>
+          <IconWrapper>
+            <SearchIcon fill={focused ? "black" : "#c5c5c5"} />
+          </IconWrapper>
+          <SearchInput
+            value={searchTerm}
+            handleChange={changeHandler}
+            handleFocus={(boolean) => setFocused(boolean)}
+            active={focused}
+            placeholder="Search"
+          />
+          <CancelButton
+            type="button"
+            show={focused && searchTerm.length > 0}
+            onClick={() => setFocused(false)}
+          >
+            <IconX fill="white" />
           </CancelButton>
-        )}
+        </SearchWrapper>
       </form>
 
-      <Results show={focused}>
-        {searchTerm.length < minSearchLength && (
-          <InstructionText>
-            Find a film by typing in the search bar.
-          </InstructionText>
-        )}
-        {searchTerm.length >= minSearchLength && results.length < 1 && (
+      <Results show={focused && searchTerm.length >= minSearchLength}>
+        {results.length < 1 && (
           <InstructionText>No results for "{searchTerm}".</InstructionText>
         )}
         {results.length > 0 &&
