@@ -22,8 +22,7 @@ export const Scroll = styled.ul`
 
   overflow-x: scroll;
   scroll-snap-type: x proximity;
-  padding-bottom: calc(0.75 * ${gutter});
-  margin-bottom: calc(-0.25 * ${gutter});
+  padding-bottom: 40px;
 
   &::before,
   &::after {

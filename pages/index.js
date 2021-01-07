@@ -1,9 +1,20 @@
+import { forwardRef } from "react";
 import Head from "next/head";
+import Link from "next/link";
+import queryString from "query-string";
 
 import { fetchContent, fetchFilms } from "../utils/contentfulHelpers";
 import SearchSuggested from "../components/SearchSuggested";
 import HorizontalScroll from "../components/HorizontalScroll";
 import Card from "../components/Card";
+
+const BrandLink = forwardRef(({ onClick, href, brand }, ref) => {
+  return (
+    <a href={href} onClick={onClick} ref={ref}>
+      <Card image={brand.logo} />
+    </a>
+  );
+});
 
 export default function Home({ brands, films }) {
   return (
@@ -25,13 +36,21 @@ export default function Home({ brands, films }) {
         </p>
         <SearchSuggested items={films} />
         <h2>Discover</h2>
-        <h3>Popular Brands</h3>
         <HorizontalScroll>
           {brands.map((b) => (
-            <Card
+            <Link
               key={b.name}
-              image={b.logo}
-            />
+              href={{
+                pathname: "/search",
+                query: queryString.stringify(
+                  { brands: [b.name.toLowerCase()] },
+                  { arrayFormat: "index" }
+                ),
+              }}
+              passHref
+            >
+              <BrandLink brand={b}></BrandLink>
+            </Link>
           ))}
         </HorizontalScroll>
       </main>
@@ -43,7 +62,7 @@ export async function getStaticProps() {
   const films = await fetchFilms();
   const fetchBrands = await fetchContent(`
     {
-      brandCollection(where: {promote: true}) {
+      brandCollection(where: {promote: true}, order: [name_ASC]) {
         items {
           name
           logo {

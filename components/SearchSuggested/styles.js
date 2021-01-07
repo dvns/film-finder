@@ -20,7 +20,8 @@ export const Results = styled.div`
   display: ${(props) => (props.show ? "block" : "none")};
   width: 100%;
   max-height: 315px;
-  border-radius: 5px;
+  border-radius: 10px;
+  /* border: 1px solid #d2d2d2; */
   background: white;
   overflow: scroll;
   padding: 10px;
@@ -48,9 +49,9 @@ export const CancelButton = styled.button`
   width: 25px;
   height: 25px;
   padding: 7px;
-  border-radius: 5px;
+  border-radius: 10px;;
   border: none;
-  background: black;
+  background: #080b2f;
   box-shadow: 0 0.6px 2.2px rgba(0, 0, 0, 0.011),
     0 1.3px 5.3px rgba(0, 0, 0, 0.016), 0 2.5px 10px rgba(0, 0, 0, 0.02),
     0 4.5px 17.9px rgba(0, 0, 0, 0.024), 0 8.4px 33.4px rgba(0, 0, 0, 0.029),

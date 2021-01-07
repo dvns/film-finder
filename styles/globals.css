@@ -3,7 +3,8 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background: #f0f0f0;
+  background: white;
+  color: #7c798a;
 }
 
 a {
@@ -20,13 +21,16 @@ main {
 }
 
 h1 {
-  font-size: 36px;
+  font-size: 32px;
+  color: #080b2f;
 }
 
 h2 {
-  font-size: 32px;
+  font-size: 28px;
+  color: #080b2f;
 }
 
 h3 {
-  font-size: 28px;
+  font-size: 24px;
+  color: #080b2f;
 }

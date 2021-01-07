@@ -110,7 +110,7 @@ export default function SearchSuggested({ items }) {
       <form onSubmit={submitHandler}>
         <SearchWrapper>
           <IconWrapper>
-            <SearchIcon fill={focused ? "black" : "#c5c5c5"} />
+            <SearchIcon fill={focused ? "#080b2f" : "#080b2f"} />
           </IconWrapper>
           <SearchInput
             value={searchTerm}

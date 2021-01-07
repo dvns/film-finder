@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const ProductDiv = styled.div`
   display: flex;
   align-items: center;
+  color: #080b2f;
 `;
 
 export const Title = styled.p`
