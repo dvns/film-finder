@@ -1,86 +1,56 @@
-import { useEffect, useState, forwardRef, useReducer } from 'react';
-import Link from 'next/link';
-import { withRouter } from 'next/router';
-import queryString from 'query-string';
+import { useEffect, useState, forwardRef } from "react";
+import Link from "next/link";
+import { withRouter } from "next/router";
+import queryString from "query-string";
 
-import Product from '../../components/Product';
+import Product from "../../components/Product";
+import SearchSuggested from "../../components/SearchSuggested";
 
-import { fetchContent, fetchFilms } from '../../utils/contentfulHelpers';
-import { matchAnyCaseInsensitive, stringToArrayLowerCase } from '../../utils/searchHelpers';
+import { fetchContent, fetchFilms } from "../../utils/contentfulHelpers";
+import {
+  matchAnyCaseInsensitive,
+  stringToArrayLowerCase,
+} from "../../utils/searchHelpers";
 
 export const withPageRouter = (Component) => {
   return withRouter(({ router, ...props }) => {
-    router.query = queryString.parse(router.asPath.split(/\?/)[1], {arrayFormat: 'index'});
+    router.query = queryString.parse(router.asPath.split(/\?/)[1], {
+      arrayFormat: "index",
+    });
     return <Component {...props} router={router} />;
   });
 };
-
-function filtersReducer(state, action) {
-  switch (action.type) {
-    case 'TOGGLE_CHECKBOX':
-      return {
-        ...state,
-        filtered: {
-          ...state.filtered,
-          [action.payload.name]: {
-            ...state.filtered[action.payload.name],
-            [action.payload.id]: action.payload.checked,
-          },
-        },
-      };
-    default:
-      return state;
-  }
-}
 
 function getCheckedKeys(obj) {
   return Object.keys(obj).filter((key) => obj[key]);
 }
 
 function getLabel(key, arr) {
-  return arr.find(item => item.id === key).label;
+  return arr.find((item) => item.id === key).label;
 }
 
-function initCheckedObj(arr, queryArr = []) {
-  const obj = arr.reduce((acc, curr) => ((acc[curr.id] = false), acc), {});
-  queryArr.forEach(key => obj[key] = true);
-  return obj;
-}
-
-function Search({router, filters, films}) {
-  const [{ filtered }, dispatch] = useReducer(filtersReducer, {
-    filtered: {
-      brands: initCheckedObj(filters.brands, router.query.brands),
-      types: initCheckedObj(filters.types, router.query.types),
-      formats: initCheckedObj(filters.formats, router.query.formats),
-    },
+function Search({ router, filters, films }) {
+  const [filtered, setFiltered] = useState({
+    brands: initCheckedObj(filters.brands, router.query.brands),
+    types: initCheckedObj(filters.types, router.query.types),
+    formats: initCheckedObj(filters.formats, router.query.formats),
   });
-  const [searchTerm, setSearchTerm] = useState(router.query.q || '');
+  const [searchTerm, setSearchTerm] = useState(router.query.q || "");
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    // On initial load, compare query params with available filter options
-    // Redirect to home page if query string contains invalid options
-    // Otherwise, set the initial state of filtered options
-  }, []);
+    const newFiltered = {
+      brands: initCheckedObj(filters.brands, router.query.brands),
+      types: initCheckedObj(filters.types, router.query.types),
+      formats: initCheckedObj(filters.formats, router.query.formats),
+    };
+    setFiltered(newFiltered);
+    setSearchTerm(router.query.q || "");
+  }, [router.query]);
 
   useEffect(() => {
     applyFilters();
-    updateQueryString();
   }, [filtered]);
-
-  function updateQueryString() {
-    const query = {
-      ...router.query,
-      brands: getCheckedKeys(filtered.brands),
-      formats: getCheckedKeys(filtered.formats),
-      types: getCheckedKeys(filtered.types),
-    };
-      router.push({
-        pathname: '/search',
-        query: queryString.stringify(query, {arrayFormat: 'index'})
-      }, undefined, { shallow: true})
-  }
 
   function applyFilters() {
     const words = stringToArrayLowerCase(searchTerm);
@@ -93,7 +63,7 @@ function Search({router, filters, films}) {
       if (checkedBrands.length > 0) {
         matchedBrands = matchAnyCaseInsensitive(
           film.brand.name,
-          checkedBrands.map(key => getLabel(key, filters.brands)),
+          checkedBrands.map((key) => getLabel(key, filters.brands))
         );
       }
 
@@ -102,7 +72,7 @@ function Search({router, filters, films}) {
       if (checkedFormats.length > 0) {
         matchedFormats = matchAnyCaseInsensitive(
           film.format,
-          checkedFormats.map(key => getLabel(key, filters.formats)),
+          checkedFormats.map((key) => getLabel(key, filters.formats))
         );
       }
 
@@ -111,7 +81,7 @@ function Search({router, filters, films}) {
       if (checkedTypes.length > 0) {
         matchedTypes = matchAnyCaseInsensitive(
           film.type,
-          checkedTypes.map(key => getLabel(key, filters.types)),
+          checkedTypes.map((key) => getLabel(key, filters.types))
         );
       }
 
@@ -122,25 +92,52 @@ function Search({router, filters, films}) {
   }
 
   function checkboxHandler(e) {
-    dispatch({
-      type: 'TOGGLE_CHECKBOX',
-      payload: {
-        name: e.target.name,
-        id: e.target.id,
-        checked: e.target.checked,
+    const newFiltered = JSON.parse(JSON.stringify(filtered));
+    newFiltered[e.target.name][e.target.id] = e.target.checked;
+    const query = {
+      ...router.query,
+      [e.target.name]: getCheckedKeys(newFiltered[e.target.name]),
+    };
+    router.push(
+      {
+        pathname: "/search",
+        query: queryString.stringify(query, { arrayFormat: "index" }),
+      },
+      undefined,
+      { shallow: true }
+    );
+  }
+
+  function initCheckedObj(arr, queryArr = []) {
+    const obj = arr.reduce((acc, curr) => ((acc[curr.id] = false), acc), {});
+    queryArr.forEach((key) => {
+      const exists = arr.find((item) => item.id === key);
+      // If query is not valid, redirect to home page.
+      if (!exists && process.browser) {
+        router.push("/");
+        return;
       }
+      obj[key] = true;
     });
+    return obj;
   }
 
   return (
     <div suppressHydrationWarning>
+      <SearchSuggested items={films} />
       <h1>Filters</h1>
       <h2>Brands:</h2>
       {filters.brands.map((brand) => (
         <div key={brand.id}>
           <label>
             {brand.label}
-            <input name="brands" id={brand.id} type="checkbox" onChange={checkboxHandler} checked={filtered.brands[brand.id]} />
+            <input
+              name="brands"
+              id={brand.id}
+              type="checkbox"
+              onChange={checkboxHandler}
+              checked={filtered.brands[brand.id]}
+            />
           </label>
         </div>
       ))}
@@ -149,7 +146,13 @@ function Search({router, filters, films}) {
         <div key={format.id}>
           <label>
             {format.label}
-            <input name="formats" id={format.id} type="checkbox" onChange={checkboxHandler} checked={filtered.formats[format.id]} />
+            <input
+              name="formats"
+              id={format.id}
+              type="checkbox"
+              onChange={checkboxHandler}
+              checked={filtered.formats[format.id]}
+            />
           </label>
         </div>
       ))}
@@ -158,7 +161,13 @@ function Search({router, filters, films}) {
         <div key={type.id}>
           <label>
             {type.label}
-            <input name="types" id={type.id} type="checkbox" onChange={checkboxHandler} checked={filtered.types[type.id]} />
+            <input
+              name="types"
+              id={type.id}
+              type="checkbox"
+              onChange={checkboxHandler}
+              checked={filtered.types[type.id]}
+            />
           </label>
         </div>
       ))}
@@ -175,9 +184,10 @@ function Search({router, filters, films}) {
 const Result = forwardRef(({ onClick, href, film }, ref) => {
   return (
     <a href={href} onClick={onClick} ref={ref}>
-      <Product>
-        <p>{`${film.brand.name} ${film.name}`}</p>
-      </Product>
+      <Product
+        title={`${film.brand.name} ${film.name}`}
+        img={film.image}
+      ></Product>
     </a>
   );
 });
@@ -194,9 +204,17 @@ export async function getStaticProps() {
     }
   `);
 
-  const brands = fetchBrands.brandCollection.items.map(b => ({label: b.name, id: b.name.toLowerCase().replace(/\s/g, '')}));
-  const types = [...new Set(films.map(film => film.type))].map(t => ({label: t, id: t.toLowerCase().replace(/\s/g, '')}));
-  const formats = [...new Set(...films.map((film) => film.format))].map(f => ({label: f, id: f.toLowerCase().replace(/\s/g, '')}));
+  const brands = fetchBrands.brandCollection.items.map((b) => ({
+    label: b.name,
+    id: b.name.toLowerCase().replace(/\s/g, ""),
+  }));
+  const types = [...new Set(films.map((film) => film.type))].map((t) => ({
+    label: t,
+    id: t.toLowerCase().replace(/\s/g, ""),
+  }));
+  const formats = [
+    ...new Set(...films.map((film) => film.format)),
+  ].map((f) => ({ label: f, id: f.toLowerCase().replace(/\s/g, "") }));
 
   return {
     props: {

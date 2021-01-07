@@ -96,6 +96,7 @@ export default function SearchSuggested({ items }) {
 
   function submitHandler(e) {
     e.preventDefault();
+    setFocused(false);
     const query = {
       q: searchTerm,
     };
