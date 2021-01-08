@@ -3,11 +3,11 @@ import styled from 'styled-components';
 export const ProductDiv = styled.div`
   display: flex;
   align-items: center;
-  color: #080b2f;
 `;
 
 export const Title = styled.p`
   margin: 0;
+  color: ${(props) => props.theme.colorHeading};
 `;
 
 export const ImageContainer = styled.div`

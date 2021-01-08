@@ -7,7 +7,8 @@ export const Input = styled.input`
   background: white;
   border-width: 1px;
   border-style: solid;
-  border-color: ${(props) => (props.active ? "#080b2f" : "#d2d2d2")};
+  border-color: ${(props) =>
+    props.active ? props.theme.brandPrimary : props.theme.brandSecondary};
   outline: 0;
   -webkit-appearance: none;
   font-family: "Inter";
@@ -16,7 +17,7 @@ export const Input = styled.input`
   transition: border-color 0.2s ease-out;
 
   &::placeholder {
-    color: #d2d2d2;
+    color: ${(props) => props.theme.brandSecondary};
     font-weight: 400;
   }
 `;
