@@ -2,9 +2,20 @@ import { useEffect, useState, forwardRef } from "react";
 import Link from "next/link";
 import { withRouter } from "next/router";
 import queryString from "query-string";
+import styled from "styled-components";
 
+import FilterWrapper from "../../components/FilterWrapper";
+import {
+  FilterGroup,
+  FilterCheckbox,
+  FilterCheckLabel,
+} from "../../components/FilterWrapper/styles";
+import FilterIcon from "../../components/Icons/IconFilter";
+import CheckIcon from "../../components/Icons/IconCheck";
+import PageWrapper from "../../components/PageWrapper";
 import Product from "../../components/Product";
 import SearchSuggested from "../../components/SearchSuggested";
+import StyledButton from "../../components/Button";
 
 import { fetchContent, fetchFilms } from "../../utils/contentfulHelpers";
 import {
@@ -12,22 +23,17 @@ import {
   stringToArrayLowerCase,
 } from "../../utils/searchHelpers";
 
-export const withPageRouter = (Component) => {
-  return withRouter(({ router, ...props }) => {
-    router.query = queryString.parse(router.asPath.split(/\?/)[1], {
-      arrayFormat: "index",
-    });
-    return <Component {...props} router={router} />;
-  });
-};
+const FilterButton = styled(StyledButton)`
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  margin-left: 5px;
+`;
 
-function getCheckedKeys(obj) {
-  return Object.keys(obj).filter((key) => obj[key]);
-}
-
-function getLabel(key, arr) {
-  return arr.find((item) => item.id === key).label;
-}
+const StyledHeader = styled.header`
+  display: flex;
+  align-items: center;
+`;
 
 function Search({ router, filters, films }) {
   const [filtered, setFiltered] = useState({
@@ -37,8 +43,10 @@ function Search({ router, filters, films }) {
   });
   const [searchTerm, setSearchTerm] = useState(router.query.q || "");
   const [results, setResults] = useState([]);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
+    // Update state filtered state based on query change
     const newFiltered = {
       brands: initCheckedObj(filters.brands, router.query.brands),
       types: initCheckedObj(filters.types, router.query.types),
@@ -49,6 +57,7 @@ function Search({ router, filters, films }) {
   }, [router.query]);
 
   useEffect(() => {
+    // Update search results when filtered state changes
     applyFilters();
   }, [filtered]);
 
@@ -123,62 +132,97 @@ function Search({ router, filters, films }) {
   }
 
   return (
-    <div suppressHydrationWarning>
-      <SearchSuggested items={films} />
-      <h1>Filters</h1>
-      <h2>Brands:</h2>
-      {filters.brands.map((brand) => (
-        <div key={brand.id}>
-          <label>
-            {brand.label}
-            <input
-              name="brands"
-              id={brand.id}
-              type="checkbox"
-              onChange={checkboxHandler}
+    <PageWrapper>
+      <StyledHeader>
+        <SearchSuggested items={films} />
+        <FilterButton onClick={() => setShowFilters(true)}>
+          <FilterIcon fill="white" />
+        </FilterButton>
+      </StyledHeader>
+      <FilterWrapper
+        show={showFilters}
+        closeHandler={() => setShowFilters(false)}
+        title={`${results.length} match${results.length === 1 ? '' : 'es'}`}
+      >
+        <FilterGroup>
+          <h2>Brands</h2>
+          {filters.brands.map((brand) => (
+            <FilterCheckLabel
+              key={brand.id}
               checked={filtered.brands[brand.id]}
-            />
-          </label>
-        </div>
-      ))}
-      <h2>Formats:</h2>
-      {filters.formats.map((format) => (
-        <div key={format.id}>
-          <label>
-            {format.label}
-            <input
-              name="formats"
-              id={format.id}
-              type="checkbox"
-              onChange={checkboxHandler}
+            >
+              <FilterCheckbox checked={filtered.brands[brand.id]}>
+                <CheckIcon></CheckIcon>
+              </FilterCheckbox>
+              {brand.label}
+              <input
+                name="brands"
+                id={brand.id}
+                type="checkbox"
+                onChange={checkboxHandler}
+                checked={filtered.brands[brand.id]}
+              />
+            </FilterCheckLabel>
+          ))}
+        </FilterGroup>
+
+        <FilterGroup>
+          <h2>Formats</h2>
+          {filters.formats.map((format) => (
+            <FilterCheckLabel
+              key={format.id}
               checked={filtered.formats[format.id]}
-            />
-          </label>
-        </div>
-      ))}
-      <h2>Types:</h2>
-      {filters.types.map((type) => (
-        <div key={type.id}>
-          <label>
-            {type.label}
-            <input
-              name="types"
-              id={type.id}
-              type="checkbox"
-              onChange={checkboxHandler}
-              checked={filtered.types[type.id]}
-            />
-          </label>
-        </div>
-      ))}
+            >
+              <FilterCheckbox checked={filtered.formats[format.id]}>
+                <CheckIcon></CheckIcon>
+              </FilterCheckbox>
+              {format.label}
+              <input
+                name="formats"
+                id={format.id}
+                type="checkbox"
+                onChange={checkboxHandler}
+                checked={filtered.formats[format.id]}
+              />
+            </FilterCheckLabel>
+          ))}
+        </FilterGroup>
+
+        <FilterGroup>
+          <h2>Types</h2>
+          {filters.types.map((type) => (
+            <FilterCheckLabel key={type.id} checked={filtered.types[type.id]}>
+              <FilterCheckbox checked={filtered.types[type.id]}>
+                <CheckIcon></CheckIcon>
+              </FilterCheckbox>
+              {type.label}
+              <input
+                name="types"
+                id={type.id}
+                type="checkbox"
+                onChange={checkboxHandler}
+                checked={filtered.types[type.id]}
+              />
+            </FilterCheckLabel>
+          ))}
+        </FilterGroup>
+      </FilterWrapper>
       <p>{`Search results for: "${searchTerm}"`}</p>
       {results.map((film) => (
         <Link key={film.slug} href={`/films/${film.slug}`} passHref>
           <Result film={film}></Result>
         </Link>
       ))}
-    </div>
+    </PageWrapper>
   );
+}
+
+function getCheckedKeys(obj) {
+  return Object.keys(obj).filter((key) => obj[key]);
+}
+
+function getLabel(key, arr) {
+  return arr.find((item) => item.id === key).label;
 }
 
 const Result = forwardRef(({ onClick, href, film }, ref) => {
@@ -228,5 +272,14 @@ export async function getStaticProps() {
     },
   };
 }
+
+export const withPageRouter = (Component) => {
+  return withRouter(({ router, ...props }) => {
+    router.query = queryString.parse(router.asPath.split(/\?/)[1], {
+      arrayFormat: "index",
+    });
+    return <Component {...props} router={router} />;
+  });
+};
 
 export default withPageRouter(Search);

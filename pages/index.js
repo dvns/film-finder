@@ -3,6 +3,7 @@ import Link from "next/link";
 import queryString from "query-string";
 
 import { fetchContent, fetchFilms } from "../utils/contentfulHelpers";
+import PageWrapper from "../components/PageWrapper";
 import SearchSuggested from "../components/SearchSuggested";
 import HorizontalScroll from "../components/HorizontalScroll";
 import Card from "../components/Card";
@@ -17,7 +18,7 @@ const BrandLink = forwardRef(({ onClick, href, brand }, ref) => {
 
 export default function Home({ brands, films }) {
   return (
-    <>
+    <PageWrapper>
       <h1>Film Lookbook</h1>
       <p>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias,
@@ -42,7 +43,7 @@ export default function Home({ brands, films }) {
           </Link>
         ))}
       </HorizontalScroll>
-    </>
+    </PageWrapper>
   );
 }
 

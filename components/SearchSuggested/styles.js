@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import StyledButton from "../Button";
 
 export const Suggested = styled.div`
   width: 100%;
@@ -15,11 +16,11 @@ export const Results = styled.div`
   display: ${(props) => (props.show ? "block" : "none")};
   width: 100%;
   max-height: 315px;
-  border-radius: 10px;
+  border-radius: ${(props) => props.theme.borderRadius};
   background: white;
   overflow: scroll;
   padding: 10px;
-  box-shadow: ${props => props.theme.uiShadow};
+  box-shadow: ${(props) => props.theme.uiShadow};
 
   a {
     display: block;
@@ -29,27 +30,17 @@ export const Results = styled.div`
   }
 `;
 
-export const CancelButton = styled.button`
+export const CancelButton = styled(StyledButton)`
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 25px;
   height: 25px;
   padding: 7px;
-  border-radius: 10px;
-  border: none;
-  background: ${(props) => props.theme.brandPrimary};
-  box-shadow: ${(props) => props.theme.uiShadow};
   transition: visibility 0.2s ease-out, opacity 0.2s ease-out;
   visibility: ${(props) => (props.show ? "visible" : "hidden")};
   opacity: ${(props) => (props.show ? "1" : "0")};
-  svg {
-    width: 100%;
-  }
 `;
 
 export const InstructionText = styled.p`
@@ -59,10 +50,11 @@ export const InstructionText = styled.p`
 
 export const IconWrapper = styled.div`
   position: absolute;
-  top: calc(50% + 5px);
+  top: 50%;
   left: 10px;
   transform: translateY(-50%);
   width: 25px;
+  height: 25px;
   svg {
     width: 100%;
     transition: fill 0.2s ease-out;

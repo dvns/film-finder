@@ -2,8 +2,12 @@ import { useEffect, useState, forwardRef } from "react";
 import queryString from "query-string";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+import IconX from "../Icons/IconX";
+import SearchIcon from "../Icons/IconSearch";
 import SearchInput from "../SearchInput";
 import Product from "../Product";
+
 import {
   matchAnyCaseInsensitive,
   stringToArrayLowerCase,
@@ -17,9 +21,6 @@ import {
   Results,
   Suggested,
 } from "./styles";
-
-import SearchIcon from "../Icons/IconSearch";
-import IconX from "../Icons/IconX";
 
 function boldText(text, searchTerm) {
   const searchArr = searchTerm.trim().split(/\s+/);
