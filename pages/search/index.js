@@ -30,6 +30,15 @@ const FilterButton = styled(StyledButton)`
   margin-left: 5px;
 `;
 
+const ClearButton = styled(StyledButton)`
+  height: auto;
+  padding: 5px 10px;
+  background: #ef8550;
+  font-weight: 600;
+  color: white;
+  visibility: ${(props) => (props.show ? "visible" : "hidden")};
+`;
+
 const StyledHeader = styled.header`
   display: flex;
   align-items: center;
@@ -107,7 +116,26 @@ function Search({ router, filters, films }) {
       ...router.query,
       [e.target.name]: getCheckedKeys(newFiltered[e.target.name]),
     };
-    router.push(
+    router.replace(
+      {
+        pathname: "/search",
+        query: queryString.stringify(query, { arrayFormat: "index" }),
+      },
+      undefined,
+      { shallow: true }
+    );
+  }
+
+  function clearFilterGroup(group) {
+    const newFiltered = JSON.parse(JSON.stringify(filtered));
+    Object.keys(newFiltered[group]).forEach(key => {
+      newFiltered[group][key] = false;
+    });
+    const query = {
+      ...router.query,
+      [group]: getCheckedKeys(newFiltered[group]),
+    };
+    router.replace(
       {
         pathname: "/search",
         query: queryString.stringify(query, { arrayFormat: "index" }),
@@ -142,70 +170,36 @@ function Search({ router, filters, films }) {
       <FilterWrapper
         show={showFilters}
         closeHandler={() => setShowFilters(false)}
-        title={`${results.length} match${results.length === 1 ? '' : 'es'}`}
+        title={`${results.length} match${results.length === 1 ? "" : "es"}`}
       >
-        <FilterGroup>
-          <h2>Brands</h2>
-          {filters.brands.map((brand) => (
-            <FilterCheckLabel
-              key={brand.id}
-              checked={filtered.brands[brand.id]}
-            >
-              <FilterCheckbox checked={filtered.brands[brand.id]}>
-                <CheckIcon></CheckIcon>
-              </FilterCheckbox>
-              {brand.label}
-              <input
-                name="brands"
-                id={brand.id}
-                type="checkbox"
-                onChange={checkboxHandler}
-                checked={filtered.brands[brand.id]}
-              />
-            </FilterCheckLabel>
-          ))}
-        </FilterGroup>
-
-        <FilterGroup>
-          <h2>Formats</h2>
-          {filters.formats.map((format) => (
-            <FilterCheckLabel
-              key={format.id}
-              checked={filtered.formats[format.id]}
-            >
-              <FilterCheckbox checked={filtered.formats[format.id]}>
-                <CheckIcon></CheckIcon>
-              </FilterCheckbox>
-              {format.label}
-              <input
-                name="formats"
-                id={format.id}
-                type="checkbox"
-                onChange={checkboxHandler}
-                checked={filtered.formats[format.id]}
-              />
-            </FilterCheckLabel>
-          ))}
-        </FilterGroup>
-
-        <FilterGroup>
-          <h2>Types</h2>
-          {filters.types.map((type) => (
-            <FilterCheckLabel key={type.id} checked={filtered.types[type.id]}>
-              <FilterCheckbox checked={filtered.types[type.id]}>
-                <CheckIcon></CheckIcon>
-              </FilterCheckbox>
-              {type.label}
-              <input
-                name="types"
-                id={type.id}
-                type="checkbox"
-                onChange={checkboxHandler}
-                checked={filtered.types[type.id]}
-              />
-            </FilterCheckLabel>
-          ))}
-        </FilterGroup>
+        {Object.keys(filtered).map((group) => (
+          <FilterGroup key={group}>
+            <header>
+              <h2>{group}</h2>
+              <ClearButton onClick={() => clearFilterGroup(group)} show={getCheckedKeys(filtered[group]).length > 0}>
+                Clear
+              </ClearButton>
+            </header>
+            {filters[group].map((item) => (
+              <FilterCheckLabel
+                key={item.id}
+                checked={filtered[group][item.id]}
+              >
+                <FilterCheckbox checked={filtered[group][item.id]}>
+                  <CheckIcon></CheckIcon>
+                </FilterCheckbox>
+                {item.label}
+                <input
+                  name={group}
+                  id={item.id}
+                  type="checkbox"
+                  onChange={checkboxHandler}
+                  checked={filtered[group][item.id]}
+                />
+              </FilterCheckLabel>
+            ))}
+          </FilterGroup>
+        ))}
       </FilterWrapper>
       <p>{`Search results for: "${searchTerm}"`}</p>
       {results.map((film) => (

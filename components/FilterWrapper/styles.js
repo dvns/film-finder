@@ -13,23 +13,24 @@ export const StyledFilterWrapper = styled.div`
   transition-delay: visibility 0.2s;
   visibility: ${(props) => (props.show ? "visible" : "hidden")};
   /* opacity: ${(props) => (props.show ? "1" : "0")}; */
-  header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 20px;
-    background: white;
-    border-bottom: 1px solid ${props => props.theme.brandSecondary};
-  }
 
   h1 {
     margin: 0;
     font-size: 24px;
   }
+`;
+
+export const FilterHeader = styled.header`
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+  background: white;
+  border-bottom: 1px solid ${(props) => props.theme.brandSecondary};
 `;
 
 export const FilterBody = styled.div`
@@ -45,10 +46,15 @@ export const FilterGroup = styled.div`
   border-radius: ${(props) => props.theme.borderRadius};
   background: ${(props) => props.theme.brandSecondary};
 
+  header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
   h2 {
     font-size: 20px;
     margin: 0;
-    margin-bottom: 20px;
   }
 `;
 
