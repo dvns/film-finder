@@ -24,7 +24,9 @@ export default function FilterWrapper({ show, closeHandler, title, children }) {
           <IconX></IconX>
         </CloseButton>
       </FilterHeader>
-      <FilterBody show={show}>{children}</FilterBody>
+      <FilterBody show={show}>
+        {children}
+      </FilterBody>
     </StyledFilterWrapper>
   );
 }

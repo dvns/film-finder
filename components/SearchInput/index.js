@@ -33,6 +33,7 @@ export default function SearchInput({
       placeholder={placeholder}
       active={active}
       spellCheck="false"
+      autoComplete="off"
     />
   );
 }

@@ -23,8 +23,29 @@ import {
   stringToArrayLowerCase,
 } from "../../utils/searchHelpers";
 
+const FilterBadge = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  transform: translate(30%, -70%);
+  display: ${(props) => (props.show ? "flex" : "none")};
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: ${(props) => props.theme.brandPrimary};
+  border-radius: ${(props) => props.theme.borderRadius};
+  border: 1px solid ${(props) => props.theme.brandPrimary};
+  box-shadow: ${(props) => props.theme.uiShadow};
+`;
+
 const FilterButton = styled(StyledButton)`
   flex-shrink: 0;
+  position: relative;
   width: 42px;
   height: 42px;
   margin-left: 5px;
@@ -62,6 +83,7 @@ function Search({ router, filters, films }) {
   const [searchTerm, setSearchTerm] = useState(router.query.q || "");
   const [results, setResults] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [filteredCount, setFilteredCount] = useState(0);
 
   useEffect(() => {
     // Update state filtered state based on query change
@@ -75,6 +97,14 @@ function Search({ router, filters, films }) {
   }, [router.query]);
 
   useEffect(() => {
+    const count = Object.keys(filtered).reduce((counter, group) => {
+      if (Object.values(filtered[group]).includes(true)) {
+        return counter + 1;
+      } else {
+        return counter;
+      }
+    }, 0);
+    setFilteredCount(count);
     // Update search results when filtered state changes
     applyFilters();
   }, [filtered]);
@@ -137,7 +167,7 @@ function Search({ router, filters, films }) {
 
   function clearFilterGroup(group) {
     const newFiltered = JSON.parse(JSON.stringify(filtered));
-    Object.keys(newFiltered[group]).forEach(key => {
+    Object.keys(newFiltered[group]).forEach((key) => {
       newFiltered[group][key] = false;
     });
     const query = {
@@ -174,6 +204,7 @@ function Search({ router, filters, films }) {
         <SearchSuggested items={films} />
         <FilterButton onClick={() => setShowFilters(true)}>
           <FilterIcon fill="white" />
+          <FilterBadge show={filteredCount > 0}>{filteredCount}</FilterBadge>
         </FilterButton>
       </StyledHeader>
       <FilterWrapper
@@ -214,7 +245,15 @@ function Search({ router, filters, films }) {
           </FilterGroup>
         ))}
       </FilterWrapper>
-      <p>{`Search results for: "${searchTerm}"`}</p>
+      <p>
+        {results.length > 0
+          ? `Showing ${results.length} film stocks${
+              searchTerm.length > 0 ? ` for "${searchTerm}"` : ""
+            }`
+          : `No film stocks found${
+              searchTerm.length ? ` for "${searchTerm}"` : ""
+            }`}
+      </p>
       <ResultsList>
         {results.map((film) => (
           <Link key={film.slug} href={`/films/${film.slug}`} passHref>
@@ -224,6 +263,10 @@ function Search({ router, filters, films }) {
       </ResultsList>
     </PageWrapper>
   );
+}
+
+function countFiltersApplied() {
+
 }
 
 function getCheckedKeys(obj) {
@@ -236,13 +279,13 @@ function getLabel(key, arr) {
 
 function filtersTitleText(num) {
   if (num === 0) {
-    return 'No matches';
+    return "No matches";
   }
-  return `${num} match${num > 1 ? 'es' : ''}`;
+  return `${num} match${num > 1 ? "es" : ""}`;
 }
 
 const Result = forwardRef(({ onClick, href, film }, ref) => {
-  const format = film.format.sort((a,b) => {
+  const format = film.format.sort((a, b) => {
     if (a < b) {
       return -1;
     }

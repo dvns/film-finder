@@ -25,6 +25,7 @@ export const FilterHeader = styled.header`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -50,7 +51,8 @@ export const FilterGroup = styled.div`
   header {
     display: flex;
     justify-content: space-between;
-    min-height: 26px;
+    align-items: center;
+    min-height: 32px;
     margin-bottom: 20px;
   }
 
@@ -97,5 +99,3 @@ export const FilterCheckLabel = styled.label`
     }
   }
 `;
-
-
