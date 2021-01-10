@@ -196,7 +196,7 @@ function Search({ router, filters, films }) {
               <FilterCheckLabel
                 key={item.id}
                 checked={filtered[group][item.id]}
-                for={item.id}
+                htmlFor={item.id}
               >
                 <FilterCheckbox checked={filtered[group][item.id]}>
                   <CheckIcon></CheckIcon>
