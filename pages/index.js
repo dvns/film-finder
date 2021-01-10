@@ -19,7 +19,7 @@ const BrandLink = forwardRef(({ onClick, href, brand }, ref) => {
 export default function Home({ brands, films }) {
   return (
     <PageWrapper>
-      <h1>Film Lookbook</h1>
+      <h1>FILM STOCK FRIDAY</h1>
       <p>
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestias,
         cum! Earum quis quas molestias itaque?

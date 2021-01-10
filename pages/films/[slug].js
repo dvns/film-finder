@@ -11,7 +11,7 @@ const getDate = (months) => {
   d.setMonth(d.getMonth() - months);
   return d.getTime() / 1000;
 };
-const minDate = getDate(12);
+const minDate = getDate(2);
 const maxDate = getDate(1);
 const extras = 'url_z';
 

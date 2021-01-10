@@ -13,6 +13,7 @@ export const SearchWrapper = styled.div`
 export const Results = styled.div`
   position: absolute;
   top: calc(100% + 10px);
+  z-index: 998;
   display: ${(props) => (props.show ? "block" : "none")};
   width: 100%;
   max-height: 315px;

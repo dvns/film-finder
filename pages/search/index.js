@@ -33,7 +33,8 @@ const FilterButton = styled(StyledButton)`
 const ClearButton = styled(StyledButton)`
   height: auto;
   padding: 5px 10px;
-  background: #ef8550;
+  background: ${(props) => props.theme.brandPrimary};
+  font-size: 14px;
   font-weight: 600;
   color: white;
   visibility: ${(props) => (props.show ? "visible" : "hidden")};
@@ -42,6 +43,14 @@ const ClearButton = styled(StyledButton)`
 const StyledHeader = styled.header`
   display: flex;
   align-items: center;
+`;
+
+const ResultsList = styled.div`
+  a {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
 `;
 
 function Search({ router, filters, films }) {
@@ -170,13 +179,16 @@ function Search({ router, filters, films }) {
       <FilterWrapper
         show={showFilters}
         closeHandler={() => setShowFilters(false)}
-        title={`${results.length} match${results.length === 1 ? "" : "es"}`}
+        title={filtersTitleText(results.length)}
       >
         {Object.keys(filtered).map((group) => (
           <FilterGroup key={group}>
             <header>
               <h2>{group}</h2>
-              <ClearButton onClick={() => clearFilterGroup(group)} show={getCheckedKeys(filtered[group]).length > 0}>
+              <ClearButton
+                onClick={() => clearFilterGroup(group)}
+                show={getCheckedKeys(filtered[group]).length > 0}
+              >
                 Clear
               </ClearButton>
             </header>
@@ -202,11 +214,13 @@ function Search({ router, filters, films }) {
         ))}
       </FilterWrapper>
       <p>{`Search results for: "${searchTerm}"`}</p>
-      {results.map((film) => (
-        <Link key={film.slug} href={`/films/${film.slug}`} passHref>
-          <Result film={film}></Result>
-        </Link>
-      ))}
+      <ResultsList>
+        {results.map((film) => (
+          <Link key={film.slug} href={`/films/${film.slug}`} passHref>
+            <Result film={film}></Result>
+          </Link>
+        ))}
+      </ResultsList>
     </PageWrapper>
   );
 }
@@ -219,12 +233,36 @@ function getLabel(key, arr) {
   return arr.find((item) => item.id === key).label;
 }
 
+function filtersTitleText(num) {
+  if (num === 0) {
+    return 'No matches';
+  }
+  return `${num} match${num > 1 ? 'es' : ''}`;
+}
+
 const Result = forwardRef(({ onClick, href, film }, ref) => {
+  const format = film.format.sort((a,b) => {
+    if (a < b) {
+      return -1;
+    }
+    if (a > b) {
+      return 1;
+    }
+    return 0;
+  });
   return (
     <a href={href} onClick={onClick} ref={ref}>
       <Product
+        info={
+          <>
+            <p>{film.type}</p>
+          </>
+        }
         title={`${film.brand.name} ${film.name}`}
         img={film.image}
+        style="full"
+        bgColor={film.brand.backgroundColor}
+        tags={format}
       ></Product>
     </a>
   );

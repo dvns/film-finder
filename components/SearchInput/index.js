@@ -32,6 +32,7 @@ export default function SearchInput({
       value={value}
       placeholder={placeholder}
       active={active}
+      spellCheck="false"
     />
   );
 }

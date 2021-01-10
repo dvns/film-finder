@@ -4,10 +4,12 @@ export const CardDiv = styled.div`
   width: 100%;
   height: 250px;
   border-radius: ${(props) => props.theme.borderRadius};
-  border: 1px solid ${(props) => props.theme.colorOutlines};
+  box-shadow: ${(props) => props.theme.uiShadow};
+  /* border: 1px solid ${(props) => props.theme.colorOutlines}; */
   background-image: ${(props) => `url(${props.imgUrl})`};
   background-size: 80%;
   background-repeat: no-repeat;
   background-position: center center;
   background-color: white;
+  margin-top: 15px;
 `;

@@ -31,6 +31,7 @@ export async function fetchFilms() {
           name
           brand {
             name
+            backgroundColor
           }
           iso
           type

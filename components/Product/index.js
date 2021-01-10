@@ -1,12 +1,39 @@
-import {ProductDiv, Title, ImageContainer, ProductInfo} from './styles';
+import styled from "styled-components";
+import { StyledProduct, Title, ImageContainer, ProductInfo, Tag } from "./styles";
+import StyledButton from "../Button";
+import ArrowIcon from "../Icons/IconArrow";
 
-export default function Product({title, img}) {
+const GoButton = styled(StyledButton)`
+  background: none;
+  box-shadow: none;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+
+  svg {
+    width: 15px;
+    fill: ${(props) => props.theme.brandPrimary};
+  }
+`;
+
+export default function Product({ title, img, style, info, bgColor, tags }) {
   return (
-    <ProductDiv>
-      <ImageContainer>{img && <img src={img.url}></img>}</ImageContainer>
+    <StyledProduct className={style}>
+      <ImageContainer bgColor={bgColor}>
+        {img && <img src={img.url}></img>}
+      </ImageContainer>
       <ProductInfo>
         <Title dangerouslySetInnerHTML={{ __html: title }}></Title>
+        {info}
+        {tags && tags.map((tag) => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
       </ProductInfo>
-    </ProductDiv>
+      {style === "full" && (
+        <GoButton>
+          <ArrowIcon></ArrowIcon>
+        </GoButton>
+      )}
+    </StyledProduct>
   );
-};
+}

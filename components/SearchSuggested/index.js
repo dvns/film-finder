@@ -41,6 +41,7 @@ const Result = forwardRef(({ onClick, href, film, searchTerm }, ref) => {
       <Product
         img={film.image}
         title={boldText(`${film.brand.name} ${film.name}`, searchTerm)}
+        bgColor={film.brand.backgroundColor}
       ></Product>
     </a>
   );
