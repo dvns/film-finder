@@ -37,7 +37,7 @@ const ClearButton = styled(StyledButton)`
   font-size: 14px;
   font-weight: 600;
   color: white;
-  visibility: ${(props) => (props.show ? "visible" : "hidden")};
+  display: ${(props) => (props.show ? "initial" : "none")};
 `;
 
 const StyledHeader = styled.header`
@@ -196,6 +196,7 @@ function Search({ router, filters, films }) {
               <FilterCheckLabel
                 key={item.id}
                 checked={filtered[group][item.id]}
+                for={item.id}
               >
                 <FilterCheckbox checked={filtered[group][item.id]}>
                   <CheckIcon></CheckIcon>

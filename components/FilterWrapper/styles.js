@@ -50,25 +50,13 @@ export const FilterGroup = styled.div`
   header {
     display: flex;
     justify-content: space-between;
+    min-height: 26px;
     margin-bottom: 20px;
   }
 
   h2 {
     font-size: 20px;
     margin: 0;
-  }
-`;
-
-export const FilterCheckLabel = styled.label`
-  display: flex;
-  margin-bottom: 20px;
-  font-weight: 500;
-  color: ${(props) =>
-    props.checked ? props.theme.brandPrimary : props.theme.colorBody};
-  transition: all 0.1s;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  input[type="checkbox"] {
-    display: none;
   }
 `;
 
@@ -84,7 +72,30 @@ export const FilterCheckbox = styled.div`
     props.checked ? props.theme.brandPrimary : "transparent"};
 
   svg {
-    fill: ${props => props.checked ? 'white' : "transparent"};
+    fill: ${(props) => (props.checked ? "white" : "transparent")};
   }
 `;
+
+export const FilterCheckLabel = styled.label`
+  position: relative;
+  display: flex;
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: ${(props) =>
+    props.checked ? props.theme.brandPrimary : props.theme.colorBody};
+  transition: all 0.1s;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  input[type="checkbox"] {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+  }
+
+  &:focus-within {
+    ${FilterCheckbox} {
+      outline: -webkit-focus-ring-color auto 1px;
+    }
+  }
+`;
+
 

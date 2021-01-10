@@ -30,7 +30,7 @@ export default function Product({ title, img, style, info, bgColor, tags }) {
         ))}
       </ProductInfo>
       {style === "full" && (
-        <GoButton>
+        <GoButton tabIndex="-1">
           <ArrowIcon></ArrowIcon>
         </GoButton>
       )}
