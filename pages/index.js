@@ -19,8 +19,7 @@ import Card from "../components/Card";
 
 const Hero = styled.header`
   position: relative;
-
-  background-image: url("/img20200419_15562435-positive-Edit.jpg");
+  background-image: url(${(props) => props.bgSmall});
   background-size: cover;
   background-position: center top;
   min-height: 400px;
@@ -29,7 +28,7 @@ const Hero = styled.header`
   @media (min-width: 768px) {
     min-height: 475px;
     height: 30vh;
-    background-image: url("/0024_scan.jpg");
+    background-image: url(${(props) => props.bgLarge});
     background-position: center 65%;
   }
 `;
@@ -80,7 +79,7 @@ const Featured = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 `;
 
-export default function Home({ brands, films }) {
+export default function Home({ brands, films, content }) {
   const wrapperRef = useRef(null);
   const [paddingLeft, setPaddingLeft] = useState(0);
 
@@ -100,15 +99,12 @@ export default function Home({ brands, films }) {
 
   return (
     <div>
-      <Hero>
+      <Hero bgLarge={content.heroImageLarge.url} bgSmall={content.heroImageSmall.url}>
         <HeroContent>
           <h1>
             FILM<br></br>STOCK<br></br>FRIDAY
           </h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Praesentium, dolore?
-          </p>
+          <p>{content.heading}</p>
         </HeroContent>
         <SearchContainer>
           <SearchSuggested items={films} className="searchbar" />
@@ -196,11 +192,41 @@ export async function getStaticProps() {
     }
   `);
   const brands = fetchBrands.brandCollection.items;
+  const fetchHomeContent = await fetchContent(`
+    {
+      homePage(id: "4bNSR08En4gvwe7iLFUIEz") {
+        heading
+        heroImageLarge {
+          title
+          description
+          contentType
+          fileName
+          size
+          url
+          width
+          height
+        }
+        heroImageSmall {
+          title
+          description
+          contentType
+          fileName
+          size
+          url
+          width
+          height
+        }
+      }
+    }
+  `);
+
+  const content = fetchHomeContent.homePage;
 
   return {
     props: {
       brands,
       films,
+      content,
     },
   };
 }

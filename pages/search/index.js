@@ -69,7 +69,7 @@ const StyledHeader = styled.header`
 const ResultsList = styled.div`
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(325px, 1fr));
   a {
     display: inline-block;
     width: 100%;
