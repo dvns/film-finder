@@ -67,10 +67,12 @@ const StyledHeader = styled.header`
 `;
 
 const ResultsList = styled.div`
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   a {
     display: inline-block;
     width: 100%;
-    margin-bottom: 10px;
   }
 `;
 
@@ -265,10 +267,6 @@ function Search({ router, filters, films }) {
   );
 }
 
-function countFiltersApplied() {
-
-}
-
 function getCheckedKeys(obj) {
   return Object.keys(obj).filter((key) => obj[key]);
 }
@@ -285,15 +283,6 @@ function filtersTitleText(num) {
 }
 
 const Result = forwardRef(({ onClick, href, film }, ref) => {
-  const format = film.format.sort((a, b) => {
-    if (a < b) {
-      return -1;
-    }
-    if (a > b) {
-      return 1;
-    }
-    return 0;
-  });
   return (
     <a href={href} onClick={onClick} ref={ref}>
       <Product
@@ -306,7 +295,7 @@ const Result = forwardRef(({ onClick, href, film }, ref) => {
         img={film.image}
         style="full"
         bgColor={film.brand.backgroundColor}
-        tags={format}
+        tags={film.format}
       ></Product>
     </a>
   );

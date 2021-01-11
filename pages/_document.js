@@ -31,7 +31,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <title>Film Lookbook</title>
+        <title>Film Stock Friday</title>
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <link

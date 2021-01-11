@@ -16,6 +16,20 @@ const GoButton = styled(StyledButton)`
   }
 `;
 
+function sortTags(tags) {
+  const sorted = tags.sort((a, b) => {
+    if (a < b) {
+      return -1;
+    }
+    if (a > b) {
+      return 1;
+    }
+    return 0;
+  });
+
+  return sorted;
+}
+
 export default function Product({ title, img, style, info, bgColor, tags }) {
   return (
     <StyledProduct className={style}>
@@ -25,15 +39,11 @@ export default function Product({ title, img, style, info, bgColor, tags }) {
       <ProductInfo>
         <Title dangerouslySetInnerHTML={{ __html: title }}></Title>
         {info}
-        {tags && tags.map((tag) => (
-          <Tag key={tag}>{tag}</Tag>
-        ))}
+        {tags && sortTags(tags).map((tag) => <Tag key={tag}>{tag}</Tag>)}
       </ProductInfo>
-      {style === "full" && (
-        <GoButton tabIndex="-1">
-          <ArrowIcon></ArrowIcon>
-        </GoButton>
-      )}
+      <GoButton tabIndex="-1">
+        <ArrowIcon></ArrowIcon>
+      </GoButton>
     </StyledProduct>
   );
 }

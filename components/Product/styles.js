@@ -40,8 +40,10 @@ export const ProductInfo = styled.div`
 
   p {
     margin: 0;
-    margin-bottom: 5px;
     font-size: 12px;
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
   }
 `;
 

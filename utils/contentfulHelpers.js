@@ -41,6 +41,7 @@ export async function fetchFilms() {
             url
           }
           flickrQuery
+          promote
         }
       }
     }

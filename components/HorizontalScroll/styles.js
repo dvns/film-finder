@@ -6,7 +6,6 @@ export const ScrollContainer = styled.div`
   display: grid;
   grid-template-columns: ${gutter} 1fr ${gutter};
   align-content: start;
-  margin: 0 -${gutter};
 `;
 
 export const Scroll = styled.ul`
@@ -28,6 +27,14 @@ export const Scroll = styled.ul`
   &::after {
     content: "";
     width: 10px;
+  }
+
+  @media (min-width: 600px) {
+    grid-auto-columns: calc(33% - ${gutter} * 2);
+  }
+
+  @media (min-width: 960px) {
+    grid-auto-columns: calc(25% - ${gutter} * 2);
   }
 `;
 

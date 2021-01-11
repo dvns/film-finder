@@ -4,10 +4,10 @@ import {
   Item,
 } from "./styles";
 
-export default function HorizontalScroll({children}) {
+export default function HorizontalScroll({children, paddingLeft}) {
   return (
     <ScrollContainer>
-      <Scroll>
+      <Scroll style={{ paddingLeft }}>
         {children.map((c) => (
           <Item key={c.key}>{c}</Item>
         ))}
