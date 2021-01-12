@@ -38,6 +38,7 @@ export const CancelButton = styled(StyledButton)`
   box-shadow: none;
   border: none;
   background: none;
+  border-radius: 0;
   transition: visibility 0.2s ease-out, opacity 0.2s ease-out;
   visibility: ${(props) => (props.show ? "visible" : "hidden")};
   opacity: ${(props) => (props.show ? "1" : "0")};

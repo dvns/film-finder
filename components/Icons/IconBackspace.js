@@ -1,7 +1,7 @@
 const IconBackspace = (props) => {
   return (
     <svg
-      viewBox="0.5 0.5 24 24"
+      viewBox="0.5 0.5 24 22"
       width="100%"
       {...props}
     >
