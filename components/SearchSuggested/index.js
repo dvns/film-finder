@@ -3,7 +3,7 @@ import queryString from "query-string";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import IconX from "../Icons/IconX";
+import BackspaceIcon from "../Icons/IconBackspace";
 import SearchIcon from "../Icons/IconSearch";
 import SearchInput from "../SearchInput";
 import Product from "../Product";
@@ -127,7 +127,7 @@ export default function SearchSuggested({ items }) {
             show={focused && searchTerm.length > 0}
             onClick={() => setFocused(false)}
           >
-            <IconX fill="white" />
+            <BackspaceIcon />
           </CancelButton>
         </SearchWrapper>
       </form>

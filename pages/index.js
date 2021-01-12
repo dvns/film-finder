@@ -10,28 +10,13 @@ import queryString from "query-string";
 import styled from "styled-components";
 
 import { fetchContent, fetchFilms } from "../utils/contentfulHelpers";
-import PageHeader from "../components/PageHeader";
-import PageWrapper from "../components/PageWrapper";
+import StyledButton from "../components/Button";
 import Product from "../components/Product";
+import CloseIcon from "../components/Icons/IconX";
+import SearchIcon from "../components/Icons/IconSearch";
 import SearchSuggested from "../components/SearchSuggested";
 import HorizontalScroll from "../components/HorizontalScroll";
 import Card from "../components/Card";
-
-const Hero = styled.header`
-  position: relative;
-  background-image: url(${(props) => props.bgSmall});
-  background-size: cover;
-  background-position: center top;
-  min-height: 400px;
-  height: 40vh;
-
-  @media (min-width: 768px) {
-    min-height: 475px;
-    height: 30vh;
-    background-image: url(${(props) => props.bgLarge});
-    background-position: center 65%;
-  }
-`;
 
 const InnerWrapper = styled.section`
   max-width: 1200px;
@@ -39,37 +24,30 @@ const InnerWrapper = styled.section`
   padding: 20px;
 `;
 
-const SearchContainer = styled(InnerWrapper)`
-  & > div {
-    max-width: 500px;
+const SearchButton = styled(StyledButton)`
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+
+  svg {
+    width: ${(props) => (props.showSearch ? "20px" : "30px")};
+    height: ${(props) => (props.showSearch ? "20px" : "30px")};
+    fill: ${(props) => props.theme.brandPrimary};
   }
 `;
 
-const HeroContent = styled(InnerWrapper)`
-  color: white;
-
-  h1 {
-    font-size: 16px;
-    line-height: 0.9;
-    margin: 0;
-  }
-
-  p {
-    max-width: 500px;
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0;
-    margin-top: 50px;
-    color: white;
-  }
-
-  @media (min-width: 768px) {
-    color: ${(props) => props.theme.brandPrimary};
-    p {
-      margin-top: 75px;
-      color: ${(props) => props.theme.brandPrimary};
-    }
-  }
+const Overlay = styled.div`
+  z-index: -1;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 `;
 
 const Featured = styled.div`
@@ -79,12 +57,40 @@ const Featured = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 `;
 
+const SearchContainer = styled.div`
+  padding-top: 20px;
+`;
+
+const StyledHeader = styled.header`
+  z-index: 9999;
+  position: ${(props) => (props.showSearch ? "fixed" : "static")};
+  top: 0;
+  width: 100%;
+  background: white;
+
+  h1 {
+    font-size: 16px;
+    line-height: 0.9;
+    margin: 0;
+  }
+
+  .header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+`;
+
 export default function Home({ brands, films, content }) {
   const wrapperRef = useRef(null);
+  const headerRef = useRef(null);
   const [paddingLeft, setPaddingLeft] = useState(0);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [showSearch, setShowSearch] = useState(false);
 
   function updateSize() {
     setPaddingLeft(wrapperRef.current.getBoundingClientRect().left);
+    setHeaderHeight(headerRef.current.getBoundingClientRect().height);
   }
 
   useLayoutEffect(() => {
@@ -95,23 +101,34 @@ export default function Home({ brands, films, content }) {
 
   useEffect(() => {
     setPaddingLeft(wrapperRef.current.getBoundingClientRect().left);
+    setHeaderHeight(headerRef.current.getBoundingClientRect().height);
   }, [wrapperRef]);
 
   return (
     <div>
-      <Hero bgLarge={content.heroImageLarge.url} bgSmall={content.heroImageSmall.url}>
-        <HeroContent>
-          <h1>
-            FILM<br></br>STOCK<br></br>FRIDAY
-          </h1>
-          <p>{content.heading}</p>
-        </HeroContent>
-        <SearchContainer>
-          <SearchSuggested items={films} className="searchbar" />
-        </SearchContainer>
-      </Hero>
+      <StyledHeader showSearch={showSearch} ref={headerRef}>
+        <InnerWrapper>
+          <div className="header-wrapper">
+            <h1>
+              FILM<br></br>STOCK<br></br>FRIDAY
+            </h1>
+            <SearchButton
+              showSearch={showSearch}
+              onClick={() => setShowSearch((show) => !show)}
+            >
+              {showSearch ? <CloseIcon /> : <SearchIcon />}
+            </SearchButton>
+          </div>
+          {showSearch && (
+            <SearchContainer>
+              <SearchSuggested items={films} />
+              <Overlay onClick={() => setShowSearch(false)} />
+            </SearchContainer>
+          )}
+        </InnerWrapper>
+      </StyledHeader>
 
-      <InnerWrapper>
+      <InnerWrapper style={{marginTop: showSearch ? headerHeight : "0px"}}>
         <h2>Most Popular</h2>
         <Featured>
           {films
@@ -124,7 +141,10 @@ export default function Home({ brands, films, content }) {
         </Featured>
       </InnerWrapper>
 
-      <InnerWrapper ref={wrapperRef} style={{paddingBottom: 0, marginBottom: '-20px'}}>
+      <InnerWrapper
+        ref={wrapperRef}
+        style={{ paddingBottom: 0, marginBottom: "-20px" }}
+      >
         <h2>Brands</h2>
       </InnerWrapper>
 

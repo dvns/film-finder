@@ -11,17 +11,13 @@ export const SearchWrapper = styled.div`
 `;
 
 export const Results = styled.div`
-  position: absolute;
-  top: calc(100% + 10px);
-  z-index: 998;
   display: ${(props) => (props.show ? "block" : "none")};
   width: 100%;
   max-height: 315px;
-  border-radius: ${(props) => props.theme.borderRadius};
   background: white;
   overflow: scroll;
   padding: 10px;
-  box-shadow: ${(props) => props.theme.uiShadow};
+  margin-top: 10px;
 
   a {
     display: block;
@@ -38,7 +34,10 @@ export const CancelButton = styled(StyledButton)`
   transform: translateY(-50%);
   width: 25px;
   height: 25px;
-  padding: 7px;
+  padding: 0;
+  box-shadow: none;
+  border: none;
+  background: none;
   transition: visibility 0.2s ease-out, opacity 0.2s ease-out;
   visibility: ${(props) => (props.show ? "visible" : "hidden")};
   opacity: ${(props) => (props.show ? "1" : "0")};
