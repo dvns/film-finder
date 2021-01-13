@@ -10,17 +10,20 @@ import queryString from "query-string";
 import styled from "styled-components";
 
 import { fetchContent, fetchFilms } from "../utils/contentfulHelpers";
-import StyledButton from "../components/Button";
-import Product from "../components/Product";
-import HorizontalScroll from "../components/HorizontalScroll";
 import Card from "../components/Card";
-
+import HorizontalScroll from "../components/HorizontalScroll";
+import Product from "../components/Product";
 import SearchHeader from "../components/SearchHeader";
 
 const InnerWrapper = styled.section`
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+
+  h3 {
+    font-size: 16px;
+    text-transform: uppercase;
+  }
 `;
 
 const Featured = styled.div`
@@ -30,7 +33,48 @@ const Featured = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 `;
 
-export default function Home({ brands, films, content }) {
+const Hero = styled(InnerWrapper)`
+  h2 {
+    max-width: 550px;
+    font-size: 36px;
+    color: ${(props) => props.theme.brandPrimary};
+  }
+
+  @media (min-width: 920px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+      flex-grow: 1;
+      min-width: 500px;
+    }
+  }
+`;
+
+const HeroImageContainer = styled.div`
+  position: relative;
+  left: 15px;
+  top: 15px;
+  max-width: 300px;
+  display: inline-block;
+  background: rgb(255, 239, 168);
+  margin-bottom: 15px;
+
+  @media (min-width: 375px) {
+    max-width: 100%;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    position: relative;
+    left: -15px;
+    top: 15px;
+  }
+`;
+
+export default function Home({ brands, films }) {
   const wrapperRef = useRef(null);
   const [paddingLeft, setPaddingLeft] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -51,13 +95,19 @@ export default function Home({ brands, films, content }) {
 
   return (
     <div>
-      <SearchHeader
-        onHeightChange={(h) => setHeaderHeight(h)}
-        films={films}
-      />
+      <SearchHeader onHeightChange={(h) => setHeaderHeight(h)} films={films} />
 
-      <InnerWrapper style={{ marginTop: headerHeight }}>
-        <h2>Most Popular</h2>
+      <Hero style={{ marginTop: headerHeight }}>
+        <h2>
+          Explore&nbsp;photos taken&nbsp;with&nbsp;your favourite&nbsp;films
+        </h2>
+        <HeroImageContainer>
+          <img src="https://images.ctfassets.net/7x23siqvvl83/5nDIBjNQkLgt8U4q3f8Eci/e5cb12fc64e2af6cb372a325a671bb6b/0002.jpg" />
+        </HeroImageContainer>
+      </Hero>
+
+      <InnerWrapper>
+        <h3>Top Picks</h3>
         <Featured>
           {films
             .filter((f) => f.promote)
@@ -73,7 +123,7 @@ export default function Home({ brands, films, content }) {
         ref={wrapperRef}
         style={{ paddingBottom: 0, marginBottom: "-20px" }}
       >
-        <h2>Brands</h2>
+        <h3>Discover by brands</h3>
       </InnerWrapper>
 
       <HorizontalScroll paddingLeft={paddingLeft}>
@@ -140,41 +190,11 @@ export async function getStaticProps() {
     }
   `);
   const brands = fetchBrands.brandCollection.items;
-  const fetchHomeContent = await fetchContent(`
-    {
-      homePage(id: "4bNSR08En4gvwe7iLFUIEz") {
-        heading
-        heroImageLarge {
-          title
-          description
-          contentType
-          fileName
-          size
-          url
-          width
-          height
-        }
-        heroImageSmall {
-          title
-          description
-          contentType
-          fileName
-          size
-          url
-          width
-          height
-        }
-      }
-    }
-  `);
-
-  const content = fetchHomeContent.homePage;
 
   return {
     props: {
       brands,
       films,
-      content,
     },
   };
 }

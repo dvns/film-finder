@@ -1,5 +1,6 @@
+import Link from "next/link";
+
 import {
-  forwardRef,
   useRef,
   useEffect,
   useState,
@@ -28,8 +29,8 @@ const SearchButton = styled(StyledButton)`
   box-shadow: none;
 
   svg {
-    width: ${(props) => (props.showSearch ? "20px" : "30px")};
-    height: ${(props) => (props.showSearch ? "20px" : "30px")};
+    width: ${(props) => (props.showSearch ? "15px" : "30px")};
+    height: ${(props) => (props.showSearch ? "15px" : "30px")};
     fill: ${(props) => props.theme.brandPrimary};
   }
 `;
@@ -43,10 +44,16 @@ const Overlay = styled.div`
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
+  opacity: ${(props) => (props.show ? "1" : "0")};
+  visibility: ${(props) => (props.show ? "visible" : "hidden")};
 `;
 
 const SearchContainer = styled.div`
-  padding-bottom: 20px;
+  padding-bottom: ${(props) => (props.show ? "20px" : "0")};
+  max-height: ${(props) => (props.show ? "500px" : "0")};
+  opacity: ${(props) => (props.show ? "1" : "0")};
+  overflow: hidden;
+  transition: all 0.2s ease-out;
 `;
 
 const HeaderContainer = styled.div`
@@ -59,6 +66,7 @@ const HeaderContainer = styled.div`
     font-size: 16px;
     line-height: 0.9;
     margin: 0;
+    cursor: pointer;
   }
 `;
 
@@ -79,13 +87,23 @@ export default function SearchHeader({ films, onHeightChange }) {
   function updateSize() {
     const height = headerRef.current.getBoundingClientRect().height;
     setHeaderHeight(height);
-    onHeightChange(height);
+    onHeightChange && onHeightChange(height);
   }
 
   useLayoutEffect(() => {
+    const escHandler = (event) => {
+      if (event.keyCode === 27) {
+        setShowSearch(false);
+      }
+    };
+
     updateSize();
     window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
+    window.addEventListener("keydown", escHandler);
+    return () => {
+      window.removeEventListener("resize", updateSize);
+      window.removeEventListener("keydown", escHandler);
+    };
   }, []);
 
   useEffect(() => {
@@ -96,9 +114,11 @@ export default function SearchHeader({ films, onHeightChange }) {
     <StyledHeader showSearch={showSearch}>
       <InnerWrapper>
         <HeaderContainer ref={headerRef}>
-          <h1>
-            FILM<br></br>STOCK<br></br>FRIDAY
-          </h1>
+          <Link href="/">
+            <h1>
+              FILM<br></br>STOCK<br></br>FRIDAY
+            </h1>
+          </Link>
           <SearchButton
             showSearch={showSearch}
             onClick={() => setShowSearch((show) => !show)}
@@ -106,12 +126,10 @@ export default function SearchHeader({ films, onHeightChange }) {
             {showSearch ? <CloseIcon /> : <SearchIcon />}
           </SearchButton>
         </HeaderContainer>
-        {showSearch && (
-          <SearchContainer>
-            <SearchSuggested items={films} />
-            <Overlay onClick={() => setShowSearch(false)} />
-          </SearchContainer>
-        )}
+        <SearchContainer show={showSearch}>
+          <SearchSuggested items={films} />
+          <Overlay show={showSearch} onClick={() => setShowSearch(false)} />
+        </SearchContainer>
       </InnerWrapper>
     </StyledHeader>
   );

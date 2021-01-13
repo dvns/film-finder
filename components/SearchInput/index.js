@@ -13,7 +13,6 @@ export default function SearchInput({
     const escHandler = (event) => {
       if (event.keyCode === 27) {
         handleFocus(false);
-        inputRef.current.blur();
       }
     };
     window.addEventListener("keydown", escHandler);
