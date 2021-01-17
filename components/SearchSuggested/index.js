@@ -140,7 +140,11 @@ export default function SearchSuggested({ items, onSubmit }) {
         {results.length > 0 &&
           results.map((film) => (
             <Link key={film.slug} href={`/films/${film.slug}`} passHref>
-              <Result film={film} searchTerm={searchTerm}></Result>
+              <Result
+                film={film}
+                searchTerm={searchTerm}
+                onClick={() => {onSubmit(); setFocused(false);}}
+              ></Result>
             </Link>
           ))}
       </Results>
