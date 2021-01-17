@@ -16,12 +16,19 @@ import PageWrapper from "../../components/PageWrapper";
 import Product from "../../components/Product";
 import SearchSuggested from "../../components/SearchSuggested";
 import StyledButton from "../../components/Button";
+import SearchHeader from "../../components/SearchHeader";
 
 import { fetchContent, fetchFilms } from "../../utils/contentfulHelpers";
 import {
   matchAnyCaseInsensitive,
   stringToArrayLowerCase,
 } from "../../utils/searchHelpers";
+
+const InnerWrapper = styled.section`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+`;
 
 const FilterBadge = styled.div`
   position: absolute;
@@ -44,11 +51,20 @@ const FilterBadge = styled.div`
 `;
 
 const FilterButton = styled(StyledButton)`
-  flex-shrink: 0;
   position: relative;
-  width: 42px;
-  height: 42px;
-  margin-left: 5px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 5px 8px 5px 15px;
+  margin-right: 0;
+  margin-left: auto;
+
+  svg {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+  }
 `;
 
 const ClearButton = styled(StyledButton)`
@@ -61,10 +77,6 @@ const ClearButton = styled(StyledButton)`
   display: ${(props) => (props.show ? "initial" : "none")};
 `;
 
-const StyledHeader = styled.header`
-  display: flex;
-  align-items: center;
-`;
 
 const ResultsList = styled.div`
   display: grid;
@@ -73,6 +85,28 @@ const ResultsList = styled.div`
   a {
     display: inline-block;
     width: 100%;
+  }
+`;
+
+const ResultsHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: wrap;
+
+  & > * {
+    flex-grow: 1;
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 600;
+    color: ${(props) => props.theme.brandPrimary};
+    margin-right: 20px;
+    flex-grow: 999;
+  }
+
+  @media (max-width: 376px) {
   }
 `;
 
@@ -86,6 +120,7 @@ function Search({ router, filters, films }) {
   const [results, setResults] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [filteredCount, setFilteredCount] = useState(0);
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   useEffect(() => {
     // Update state filtered state based on query change
@@ -201,14 +236,27 @@ function Search({ router, filters, films }) {
   }
 
   return (
-    <PageWrapper>
-      <StyledHeader>
-        <SearchSuggested items={films} />
-        <FilterButton onClick={() => setShowFilters(true)}>
-          <FilterIcon fill="white" />
-          <FilterBadge show={filteredCount > 0}>{filteredCount}</FilterBadge>
-        </FilterButton>
-      </StyledHeader>
+    <div>
+      <SearchHeader films={films} onHeightChange={(h) => setHeaderHeight(h)} />
+      <InnerWrapper style={{ marginTop: headerHeight }}>
+        <ResultsHeader>
+          <p>
+            {results.length > 0
+              ? `Showing ${results.length} film stocks${
+                  searchTerm.length > 0 ? ` for "${searchTerm}"` : ""
+                }`
+              : `No film stocks found${
+                  searchTerm.length ? ` for "${searchTerm}"` : ""
+                }`}
+          </p>
+          <FilterButton onClick={() => setShowFilters(true)}>
+            Filters
+            <FilterIcon fill="white" />
+            <FilterBadge show={filteredCount > 0}>{filteredCount}</FilterBadge>
+          </FilterButton>
+        </ResultsHeader>
+      </InnerWrapper>
+
       <FilterWrapper
         show={showFilters}
         closeHandler={() => setShowFilters(false)}
@@ -247,23 +295,17 @@ function Search({ router, filters, films }) {
           </FilterGroup>
         ))}
       </FilterWrapper>
-      <p>
-        {results.length > 0
-          ? `Showing ${results.length} film stocks${
-              searchTerm.length > 0 ? ` for "${searchTerm}"` : ""
-            }`
-          : `No film stocks found${
-              searchTerm.length ? ` for "${searchTerm}"` : ""
-            }`}
-      </p>
-      <ResultsList>
-        {results.map((film) => (
-          <Link key={film.slug} href={`/films/${film.slug}`} passHref>
-            <Result film={film}></Result>
-          </Link>
-        ))}
-      </ResultsList>
-    </PageWrapper>
+
+      <InnerWrapper>
+        <ResultsList>
+          {results.map((film) => (
+            <Link key={film.slug} href={`/films/${film.slug}`} passHref>
+              <Result film={film}></Result>
+            </Link>
+          ))}
+        </ResultsList>
+      </InnerWrapper>
+    </div>
   );
 }
 

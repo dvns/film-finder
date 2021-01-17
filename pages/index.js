@@ -14,6 +14,7 @@ import Card from "../components/Card";
 import HorizontalScroll from "../components/HorizontalScroll";
 import Product from "../components/Product";
 import SearchHeader from "../components/SearchHeader";
+import ArrowIcon from "../components/Icons/IconArrow";
 
 const InnerWrapper = styled.section`
   max-width: 1200px;
@@ -35,7 +36,7 @@ const Featured = styled.div`
 
 const Hero = styled(InnerWrapper)`
   h2 {
-    max-width: 550px;
+    max-width: 400px;
     font-size: 36px;
     color: ${(props) => props.theme.brandPrimary};
   }
@@ -48,6 +49,7 @@ const Hero = styled(InnerWrapper)`
     h2 {
       flex-grow: 1;
       min-width: 500px;
+      padding-right: 50px;
     }
   }
 `;
@@ -71,6 +73,20 @@ const HeroImageContainer = styled.div`
     position: relative;
     left: -15px;
     top: 15px;
+  }
+`;
+
+const BrowseButton = styled.a`
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-bottom: 20px;
+  color: ${(props) => props.theme.brandPrimary};
+
+  svg {
+    margin-left: 10px;
+    fill: ${(props) => props.theme.brandPrimary};
   }
 `;
 
@@ -98,9 +114,15 @@ export default function Home({ brands, films }) {
       <SearchHeader onHeightChange={(h) => setHeaderHeight(h)} films={films} />
 
       <Hero style={{ marginTop: headerHeight }}>
-        <h2>
-          Explore&nbsp;photos taken&nbsp;with&nbsp;your favourite&nbsp;films
-        </h2>
+        <div>
+          <h2>Photos from your favourite film stocks</h2>
+          <Link href="/search" passHref>
+            <BrowseButton>
+              Browse all<ArrowIcon width="15" />
+            </BrowseButton>
+          </Link>
+        </div>
+
         <HeroImageContainer>
           <img src="https://images.ctfassets.net/7x23siqvvl83/5nDIBjNQkLgt8U4q3f8Eci/e5cb12fc64e2af6cb372a325a671bb6b/0002.jpg" />
         </HeroImageContainer>

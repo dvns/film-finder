@@ -5,14 +5,17 @@ export const StyledFilterWrapper = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 999;
+  z-index: 9999;
   width: 100%;
-  height: ${(props) => (props.show ? "100%" : "0%")};
+  height: 100%;
+  max-height: ${(props) => (props.show ? "100vh" : "0")};
   background: white;
-  transition: visibility 0.2s ease-out, height 0.2s ease-in;
+  transition: visibility 0.2s ease-out, max-height 0.2s ease-in;
   transition-delay: visibility 0.2s;
   visibility: ${(props) => (props.show ? "visible" : "hidden")};
   /* opacity: ${(props) => (props.show ? "1" : "0")}; */
+  max-width: 1200px;
+  margin: 0 auto;
 
   h1 {
     margin: 0;
