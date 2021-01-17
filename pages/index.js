@@ -3,7 +3,6 @@ import {
   useRef,
   useEffect,
   useState,
-  useLayoutEffect,
 } from "react";
 import Link from "next/link";
 import queryString from "query-string";
@@ -99,7 +98,7 @@ export default function Home({ brands, films }) {
     setPaddingLeft(wrapperRef.current.getBoundingClientRect().left);
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateSize();
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);

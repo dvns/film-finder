@@ -4,7 +4,6 @@ import {
   useRef,
   useEffect,
   useState,
-  useLayoutEffect,
 } from "react";
 
 import styled from "styled-components";
@@ -90,7 +89,7 @@ export default function SearchHeader({ films, onHeightChange }) {
     onHeightChange && onHeightChange(height);
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const escHandler = (event) => {
       if (event.keyCode === 27) {
         setShowSearch(false);
