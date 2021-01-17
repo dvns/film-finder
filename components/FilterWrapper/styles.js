@@ -61,6 +61,7 @@ export const FilterGroup = styled.div`
   h2 {
     font-size: 20px;
     margin: 0;
+    text-transform: capitalize;
   }
 `;
 
