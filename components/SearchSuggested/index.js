@@ -49,7 +49,7 @@ const Result = forwardRef(({ onClick, href, film, searchTerm }, ref) => {
 
 const minSearchLength = 2;
 
-export default function SearchSuggested({ items }) {
+export default function SearchSuggested({ items, onSubmit }) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
@@ -106,6 +106,7 @@ export default function SearchSuggested({ items }) {
       pathname: "/search",
       query: queryString.stringify(query, { arrayFormat: "index" }),
     });
+    onSubmit();
   }
 
   return (

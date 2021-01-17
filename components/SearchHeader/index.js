@@ -127,7 +127,10 @@ export default function SearchHeader({ films, onHeightChange }) {
           </SearchButton>
         </HeaderContainer>
         <SearchContainer show={showSearch}>
-          <SearchSuggested items={films} />
+          <SearchSuggested
+            items={films}
+            onSubmit={() => setShowSearch(false)}
+          />
           <Overlay show={showSearch} onClick={() => setShowSearch(false)} />
         </SearchContainer>
       </InnerWrapper>
