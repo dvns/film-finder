@@ -22,6 +22,12 @@ export default function SearchInput({
     };
   }, []);
 
+  useEffect(() => {
+    if (active) {
+      inputRef.current.focus();
+    }
+  }, [active])
+
   return (
     <Input
       ref={inputRef}

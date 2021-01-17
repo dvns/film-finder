@@ -49,7 +49,7 @@ const Result = forwardRef(({ onClick, href, film, searchTerm }, ref) => {
 
 const minSearchLength = 2;
 
-export default function SearchSuggested({ items, onSubmit }) {
+export default function SearchSuggested({ items, onSubmit, showSearch }) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
@@ -120,7 +120,7 @@ export default function SearchSuggested({ items, onSubmit }) {
             value={searchTerm}
             handleChange={changeHandler}
             handleFocus={(boolean) => setFocused(boolean)}
-            active={focused}
+            active={showSearch}
             placeholder="Search"
           />
           <CancelButton
