@@ -61,6 +61,7 @@ export const StyledProduct = styled.div`
   align-items: center;
 
   &.full {
+    min-height: 115px;
     border-radius: ${(props) => props.theme.borderRadius};
     box-shadow: ${(props) => props.theme.uiShadow};
     background: white;
