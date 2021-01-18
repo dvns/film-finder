@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { StyledProduct, Title, ImageContainer, ProductInfo, Tag } from "./styles";
 import StyledButton from "../Button";
 import ArrowIcon from "../Icons/IconArrow";
+import FilmIcon from "../Icons/IconFilm";
 
 const GoButton = styled(StyledButton)`
   background: none;
@@ -34,7 +35,7 @@ export default function Product({ title, img, style, info, bgColor, tags }) {
   return (
     <StyledProduct className={style}>
       <ImageContainer bgColor={bgColor}>
-        {img && <img src={img.url}></img>}
+        {img && <img src={img.url}></img> || <FilmIcon opacity="0.3" />}
       </ImageContainer>
       <ProductInfo>
         <Title dangerouslySetInnerHTML={{ __html: title }}></Title>
