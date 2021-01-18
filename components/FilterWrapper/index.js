@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { StyledFilterWrapper, FilterBody, FilterHeader } from "./styles";
+import { StyledFilterWrapper, FilterBody, FilterHeader, InnerWrapper } from "./styles";
 import StyledButton from "../Button";
 import IconX from "../Icons/IconX";
 
@@ -18,15 +18,15 @@ const CloseButton = styled(StyledButton)`
 export default function FilterWrapper({ show, closeHandler, title, children }) {
   return (
     <StyledFilterWrapper show={show}>
-      <FilterHeader>
-        <h1>{title}</h1>
-        <CloseButton onClick={() => closeHandler()}>
-          <IconX></IconX>
-        </CloseButton>
-      </FilterHeader>
-      <FilterBody show={show}>
-        {children}
-      </FilterBody>
+      <InnerWrapper>
+        <FilterHeader>
+          <h1>{title}</h1>
+          <CloseButton onClick={() => closeHandler()}>
+            <IconX></IconX>
+          </CloseButton>
+        </FilterHeader>
+        <FilterBody show={show}>{children}</FilterBody>
+      </InnerWrapper>
     </StyledFilterWrapper>
   );
 }

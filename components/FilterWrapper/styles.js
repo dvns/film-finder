@@ -14,13 +14,18 @@ export const StyledFilterWrapper = styled.div`
   transition-delay: visibility 0.2s;
   visibility: ${(props) => (props.show ? "visible" : "hidden")};
   /* opacity: ${(props) => (props.show ? "1" : "0")}; */
-  max-width: 1200px;
-  margin: 0 auto;
 
   h1 {
     margin: 0;
     font-size: 24px;
   }
+`;
+
+export const InnerWrapper = styled.div`
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
 `;
 
 export const FilterHeader = styled.header`
