@@ -77,7 +77,6 @@ const ClearButton = styled(StyledButton)`
   display: ${(props) => (props.show ? "initial" : "none")};
 `;
 
-
 const ResultsList = styled.div`
   display: grid;
   grid-gap: 20px;
@@ -364,7 +363,7 @@ export async function getStaticProps() {
     id: t.toLowerCase().replace(/\s/g, ""),
   }));
   const formats = [
-    ...new Set(...films.map((film) => film.format)),
+    ...new Set([...films.map((film) => film.format)].flat()),
   ].map((f) => ({ label: f, id: f.toLowerCase().replace(/\s/g, "") }));
 
   return {
